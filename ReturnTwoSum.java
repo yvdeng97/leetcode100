@@ -8,39 +8,54 @@ public class ReturnTwoSum {
         //你可以假设每种输入只会对应一个答案，并且你不能使用两次相同的元素。
         //你可以按任意顺序返回答案。
         //------------------------------------------------------------------------------------------------------------------
-        Scanner data = new Scanner(System.in);
 
-        //定义一个动态大小的数组用来接收输入的数据
-        List<Integer> list = new ArrayList<>();
-        System.out.println("请输入数组元素(输入-99退出)：");
-        while (true) {
-            int num = data.nextInt(); // 先读到一个变量里
-            if (num == -99) {
-                System.out.println("输入结束");
-                break;
+
+        try(Scanner data = new Scanner(System.in);) {
+            //定义一个动态大小的数组用来接收输入的数据
+            List<Integer> list = new ArrayList<>();
+            System.out.println("请输入数组元素(直接回车退出)：");
+            while (true) {
+                String line = data.nextLine().trim();
+                if (line.isEmpty()) {
+                    System.out.println("输入结束");
+                    break;
+                }
+
+                try {
+                    list.add(Integer.parseInt(line));
+                } catch (NumberFormatException e) {
+                    System.out.println("无效输入: '" + line + "'，请输入整数或直接回车结束。");
+                }
             }
-            list.add(num); // 再加入列表
+
+            if (list.isEmpty()) {
+                System.out.println("未输入任何有效数据，程序退出。");
+                return;
+            }
+
+            System.out.println("请输入目标值：");
+
+            if (!data.hasNextInt()) {
+                System.out.println("目标值输入无效。");
+                return;
+            }
+            int target = data.nextInt();
+
+            //调用twoSum方法，并打印返回的数组
+            System.out.println(Arrays.toString(new ReturnTwoSum().twoSum(list.stream().mapToInt(i -> i).toArray(), target)));
+
+        } catch (Exception e) {
+            System.err.println("发生未知错误: " + e.getMessage());
+            e.printStackTrace();
         }
 
-        // 2. 将 List 转换为原生 int[] 数组 (解决类型不匹配问题)
-        int[] nums = new int[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            nums[i] = list.get(i);
-        }
 
-        System.out.println("请输入目标值：");
-        int target = data.nextInt();
-
-        //调用twoSum方法，并打印返回的数组
-        System.out.println(Arrays.toString(new ReturnTwoSum().twoSum(nums, target)));
-
-        data.close();
     }
 
     //创建一个方法，接收一个数组和一个目标值，返回结果
     public int[] twoSum(int[] nums, int target) {
 
-        Map<Integer, Integer> map = new HashMap<>();
+        Map<Integer, Integer> map = new HashMap<>(nums.length);
         for(int i = 0; i < nums.length; i++){
             if(map.containsKey(target - nums[i])) {
                 return new int[]{map.get(target - nums[i]), i};
@@ -48,7 +63,10 @@ public class ReturnTwoSum {
             map.put(nums[i], i);
         }
 
-        return null;
+        return new int[0];
     }
 
 }
+
+}
+
