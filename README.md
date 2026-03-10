@@ -1,2 +1,2 @@
-# leetcode100
-用于记录leetcode刷题记录
+# CodeTop
+用于记录个人算法刷题
